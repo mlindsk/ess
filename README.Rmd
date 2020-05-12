@@ -18,7 +18,6 @@ knitr::opts_chunk$set(
 [![R build status](https://github.com/mlindsk/ess/workflows/R-CMD-check/badge.svg)](https://github.com/mlindsk/ess/actions)
 <!-- badges: end -->
 
-
 ## About ess
 
 The **ess** package is an **R** implementation of the algorithm presented in [this paper](https://arxiv.org/abs/1301.2267) and later corrected slightly [in this paper](https://doi.org/10.1109/ictai.2004.100). The ESS algorithm is used for model selection in discrete decomposable graphical models. It is fast compared to other model selection procedures in **R**, especially when data is high-dimensional. 
