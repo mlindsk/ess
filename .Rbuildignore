@@ -1,0 +1,10 @@
+Makefile
+TODO\.org
+^LICENSE\.md$
+^\.travis\.yml$
+.yaml$
+^README\.Rmd$
+^README.html$
+^appveyor\.yml$
+^data-raw$
+^\.github$

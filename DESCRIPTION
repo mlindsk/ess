@@ -1,0 +1,21 @@
+Package: ess
+Title: Eficient Stepwise Selection in Decomposable Models
+Version: 1.0
+Authors@R: 
+    person(given = "Mads",
+           family = "Lindskou",
+           role = c("aut", "cre"),
+           email = "mads@math.aau.dk")
+Description: An implementation of the ESS algorithm.
+URL: https://github.com/mlindsk/ess
+Depends: R (>= 3.5.0)
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    Rcpp,
+    igraph,
+    Matrix
+LinkingTo: Rcpp
+RoxygenNote: 7.1.0
+Suggests: tinytest

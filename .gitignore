@@ -1,0 +1,6 @@
+.Rhistory
+.RData
+examples
+TODO.org
+^README\.html$
+inst/doc
