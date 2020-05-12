@@ -49,7 +49,6 @@ Using \code{adj_lst} on an object returned by \code{fit_graph} gives the adjacen
 \dontrun{
 library(dplyr)
 
-
 d <- derma
 g <- fit_graph(d, trace = FALSE, q = 0)
 print(g)
@@ -57,8 +56,12 @@ plot(g, vertex.size = 1)
 adjm <- adj_mat(g)
 adjl <- adj_lst(g)
 
-## Cliques and separators in the graph
-rip(adjl)[1:2]
+# Cliques in the graph
+rip(adjl)$C
+
+# Components of the graph
+components(adjl) # only one here
+
 }
 }
 \references{

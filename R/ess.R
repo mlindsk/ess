@@ -8,5 +8,5 @@
 #' efficient for model selection in decomposable graphical models.
 #' 
 #' @importFrom Rcpp sourceCpp
-#' @useDynLib eSs
+#' @useDynLib ess
 "_PACKAGE"

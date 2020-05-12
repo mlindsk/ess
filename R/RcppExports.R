@@ -14,7 +14,7 @@
 #' dfs(x, "a")
 #' @export
 dfs <- function(adj, root) {
-    .Call('_efs_dfs', PACKAGE = 'efs', adj, root)
+    .Call('_ess_dfs', PACKAGE = 'ess', adj, root)
 }
 
 #' Maximum Cardinality Search
@@ -28,19 +28,19 @@ dfs <- function(adj, root) {
 #' mcs(x)
 #' @export
 mcs <- function(adj, check = TRUE) {
-    .Call('_efs_mcs', PACKAGE = 'efs', adj, check)
+    .Call('_ess_mcs', PACKAGE = 'ess', adj, check)
 }
 
 perfect_cliques <- function(x) {
-    .Call('_efs_perfect_cliques', PACKAGE = 'efs', x)
+    .Call('_ess_perfect_cliques', PACKAGE = 'ess', x)
 }
 
 perfect_separators <- function(x) {
-    .Call('_efs_perfect_separators', PACKAGE = 'efs', x)
+    .Call('_ess_perfect_separators', PACKAGE = 'ess', x)
 }
 
 parents <- function(po, ps) {
-    .Call('_efs_parents', PACKAGE = 'efs', po, ps)
+    .Call('_ess_parents', PACKAGE = 'ess', po, ps)
 }
 
 #' Runnining Intersection Property
@@ -58,34 +58,34 @@ parents <- function(po, ps) {
 #' y$S
 #' @export
 rip <- function(adj, check = TRUE) {
-    .Call('_efs_rip', PACKAGE = 'efs', adj, check)
+    .Call('_ess_rip', PACKAGE = 'ess', adj, check)
 }
 
 set_intersect <- function(v1, v2) {
-    .Call('_efs_set_intersect', PACKAGE = 'efs', v1, v2)
+    .Call('_ess_set_intersect', PACKAGE = 'ess', v1, v2)
 }
 
 set_union <- function(v1, v2) {
-    .Call('_efs_set_union', PACKAGE = 'efs', v1, v2)
+    .Call('_ess_set_union', PACKAGE = 'ess', v1, v2)
 }
 
 set_diff <- function(v1, v2) {
-    .Call('_efs_set_diff', PACKAGE = 'efs', v1, v2)
+    .Call('_ess_set_diff', PACKAGE = 'ess', v1, v2)
 }
 
 set_eq <- function(v1, v2) {
-    .Call('_efs_set_eq', PACKAGE = 'efs', v1, v2)
+    .Call('_ess_set_eq', PACKAGE = 'ess', v1, v2)
 }
 
 set_in <- function(a, b) {
-    .Call('_efs_set_in', PACKAGE = 'efs', a, b)
+    .Call('_ess_set_in', PACKAGE = 'ess', a, b)
 }
 
 set_issubeq <- function(a, b) {
-    .Call('_efs_set_issubeq', PACKAGE = 'efs', a, b)
+    .Call('_ess_set_issubeq', PACKAGE = 'ess', a, b)
 }
 
 set_any <- function(v) {
-    .Call('_efs_set_any', PACKAGE = 'efs', v)
+    .Call('_ess_set_any', PACKAGE = 'ess', v)
 }
 
