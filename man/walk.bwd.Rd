@@ -13,10 +13,11 @@
 
 \item{q}{Penalty term in the stopping criterion  (\code{0} = AIC and \code{1} = BIC)}
 
-\item{thres}{A threshold mechanism for choosing between two different ways of calculating the entropy. Can Speed up the procedure with the "correct" value.}
+\item{thres}{A threshold mechanism for choosing between two different ways of calculating
+the entropy. Can Speed up the procedure with the "correct" value.}
 }
 \value{
-A \code{bwd} object (a subclass of \code{gengraph})
+A \code{bwd} object; a subclass of \code{gengraph}) used for backward selection.
 }
 \description{
 Stepwise backward selection in decomposable graphical models
@@ -26,10 +27,6 @@ A \code{bwd} object can be created using the \code{gengraph} constructor with \c
 }
 \examples{
 
-\dontrun{
-
-library(dplyr)
-
 d <- derma[, 10:25]
 
 g <- gengraph(d, type = "bwd")
@@ -38,7 +35,7 @@ print(s)
 plot(s)
 adj_lst(s)
 adj_mat(s)
-}
+
 }
 \seealso{
 \code{\link{fit_graph}}, \code{\link{walk.fwd}}, \code{\link{gengraph}}

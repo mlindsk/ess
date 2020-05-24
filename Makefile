@@ -17,8 +17,10 @@ check_fast:
 install:
 	Rscript -e "devtools::install()"
 
-build_site:
-	Rscript -e "pkgdown::build_site()"
+build:
+	Rscript -e "devtools::build()"; \
+	cd /home/mads/Documents/phd/software/; \
+	R CMD check --as-cran ess_1.0.tar.gz
 
 test:
 	Rscript -e "devtools::load_all(); tinytest::test_all('~/Documents/phd/software/efs')"

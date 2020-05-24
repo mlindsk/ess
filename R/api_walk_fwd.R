@@ -4,13 +4,11 @@
 #' @param df data.frame
 #' @param q Penalty term in the stopping criterion  (\code{0} = AIC and \code{1} = BIC)
 #' @param thres A threshold mechanism for choosing between two different ways of calculating the entropy. Can Speed up the procedure with the "correct" value.
-#' @return A \code{fwd} object
 #' @details A \code{fwd} object can be created using the \code{gengraph} constructor with \code{type = "fwd"}
+#' @return A \code{fwd} object; a subclass of \code{gengraph}) used for forward selection.
 #' @references \url{https://arxiv.org/abs/1301.2267}, \url{https://doi.org/10.1109/ictai.2004.100}
 #' @examples
-#' \dontrun{
-#' library(dplyr)
-#' 
+#'
 #' d <- derma[, 10:25]
 #'
 #' g <- gengraph(d, type = "fwd")
@@ -19,7 +17,7 @@
 #' plot(s)
 #' adj_lst(s)
 #' adj_mat(s)
-#' }
+#'
 #' @seealso \code{\link{fit_graph}}, \code{\link{walk.bwd}}, \code{\link{gengraph}}
 #' @export
 walk.fwd <- function(x, df, q = 0.5, thres = 5) {

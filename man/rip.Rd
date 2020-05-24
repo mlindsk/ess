@@ -11,6 +11,9 @@ rip(adj, check = TRUE)
 
 \item{check}{Boolean: check if adj is decomposable}
 }
+\value{
+A list with cliques and separators of \code{adj}
+}
 \description{
 Given a decomposable graph, this functions finds a perfect numbering on the vertices using maximum cardinality search, and hereafter returns a list with two elements: "C" - A RIP-ordering of the cliques and "S" - A RIP ordering of the separators.
 }

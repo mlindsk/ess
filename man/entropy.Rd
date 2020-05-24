@@ -12,7 +12,7 @@ entropy(df, thres = 5)
 \item{thres}{A threshold mechanism for choosing between two different ways of calculating the entropy. Can Speed up the procedure with the "correct" value.}
 }
 \value{
-A numeric
+A number representing the entropy of the variables in \code{df}.
 }
 \description{
 Calculates the joint entropy over discrete variables in \code{df}

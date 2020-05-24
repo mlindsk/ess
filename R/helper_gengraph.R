@@ -45,9 +45,9 @@ stop_condition <- function(x) {
 #' @param df data.frame
 #' @param q Penalty term in the stopping criterion  (\code{0} = AIC and \code{1} = BIC)
 #' @param thres A threshold mechanism for choosing between two different ways of calculating the entropy. Can Speed up the procedure with the "correct" value.
-#' @details A \code{fwd} (or \code{bwd}) object can be created using the \code{gengraph} constructor with \code{type = "fwd"}. 
+#' @details A \code{fwd} (or \code{bwd}) object can be created using the \code{gengraph} constructor with \code{type = "fwd"}.
+#' @return A \code{fwd} or \code{bwd} object with one additional edge than the input object.
 #' @examples
-#' \dontrun{
 #'
 #' d <- derma[, 10:25]
 #'
@@ -57,7 +57,7 @@ stop_condition <- function(x) {
 #' plot(s)
 #' adj_lst(s)
 #' adj_mat(s)
-#' }
+#'
 #' @seealso \code{\link{fit_graph}}, \code{\link{walk.fwd}}, \code{\link{gengraph}}
 #' @export
 walk <- function(x, df, q, thres) UseMethod("walk")
@@ -100,6 +100,7 @@ as_adj_lst <- function(A) {
 #' Converts an adjacency list to an adjacency matrix
 #'
 #' @param adj Adjacency list
+#' @return An adjacency matrix
 #' @examples
 #' adj <- list(a = c("b", "d"), b = c("a", "c", "d"), c = c("b", "d"), d = c("a", "c", "b"))
 #' as_adj_mat(adj)
@@ -163,6 +164,7 @@ print.tree <- function(x, ...) print.gengraph(x, ...)
 #' @param vc Named character vector; the names are the vertices and
 #' the elements are the colors of the nodes
 #' @param ... Extra arguments. See the igraph package
+#' @return No return value, called for side effects
 #' @examples
 #'
 #' d <- derma[, 10:25]

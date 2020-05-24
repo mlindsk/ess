@@ -2,7 +2,7 @@ ess: Efficient Stepwise Selection in Decomposable Models
 ================
 
 <!-- badges: start -->
-[![R build status](https://github.com/mlindsk/ess/workflows/R-CMD-check/badge.svg)](https://github.com/mlindsk/ess/actions) <!-- badges: end -->
+[![R build status](https://github.com/mlindsk/ess/workflows/R-CMD-check/badge.svg)](https://github.com/mlindsk/ess/actions) [![](https://www.r-pkg.org/badges/version/ess?color=green)](https://cran.r-project.org/package=ess) <!-- badges: end -->
 
 About ess
 ---------

@@ -18,16 +18,16 @@ gengraph(df, type = "gen", adj = NULL, q = 0.5, ...)
 \item{...}{Not used (for extendibility)}
 }
 \value{
-A child class of a \code{gengraph} object
+A \code{gengraph} object with child class \code{type} used for model selection.
 }
 \description{
 A generic structure for decomposable graphical models
 }
 \examples{
-\dontrun{
+
 gengraph(derma, type = "fwd")
 gengraph(derma, type = "bwd")
-}
+
 }
 \seealso{
 \code{\link{adj_lst.gengraph}}, \code{\link{adj_mat.gengraph}}, \code{\link{fit_graph}}, \code{\link{walk.fwd}}, \code{\link{walk.bwd}}

@@ -9,6 +9,9 @@ make_complete_graph(nodes)
 \arguments{
 \item{nodes}{A character vector containing the nodes to be used in the graph}
 }
+\value{
+An adjacency list of a complete graph
+}
 \description{
 A helper function to make an adjacency list corresponding to a complete graph
 }

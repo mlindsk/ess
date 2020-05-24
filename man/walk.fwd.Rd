@@ -16,7 +16,7 @@
 \item{thres}{A threshold mechanism for choosing between two different ways of calculating the entropy. Can Speed up the procedure with the "correct" value.}
 }
 \value{
-A \code{fwd} object
+A \code{fwd} object; a subclass of \code{gengraph}) used for forward selection.
 }
 \description{
 Stepwise efficient forward selection in decomposable graphical models
@@ -25,8 +25,6 @@ Stepwise efficient forward selection in decomposable graphical models
 A \code{fwd} object can be created using the \code{gengraph} constructor with \code{type = "fwd"}
 }
 \examples{
-\dontrun{
-library(dplyr)
 
 d <- derma[, 10:25]
 
@@ -36,7 +34,7 @@ print(s)
 plot(s)
 adj_lst(s)
 adj_mat(s)
-}
+
 }
 \references{
 \url{https://arxiv.org/abs/1301.2267}, \url{https://doi.org/10.1109/ictai.2004.100}

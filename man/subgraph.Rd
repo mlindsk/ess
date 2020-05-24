@@ -9,15 +9,17 @@ subgraph(x, g)
 \arguments{
 \item{x}{Character vector of nodes}
 
-\item{g}{Adjacency list (named) or a neighbor matrix with dimnames given as the nodes}
+\item{g}{Adjacency list (named) or a adjacency matrix with dimnames given as the nodes}
+}
+\value{
+An adjacency list or adjacency matrix.
 }
 \description{
 Construct a subgraph with a given set of nodes removed
 }
 \examples{
 adj1 <- list(a = c("b", "d"), b = c("a", "c", "d"), c = c("b", "d"), d = c("a", "c", "b"))
-# Toy data so we can plot the graph
-d <- data.frame(a = "", b = "", c ="", d = "")
+d <- data.frame(a = "", b = "", c ="", d = "") # Toy data so we can plot the graph
 g <- gengraph(d, type = "gen", adj = adj1)
 plot(g)
 subgraph(c("c", "b"), adj1)

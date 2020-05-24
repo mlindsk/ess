@@ -9,6 +9,9 @@ make_null_graph(nodes)
 \arguments{
 \item{nodes}{A character vector containing the nodes to be used in the graph}
 }
+\value{
+An adjacency list the null graph with no edges
+}
 \description{
 A helper function to make an adjacency list corresponding to a null graph (no edges)
 }

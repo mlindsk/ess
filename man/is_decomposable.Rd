@@ -9,6 +9,9 @@ is_decomposable(adj)
 \arguments{
 \item{adj}{Adjacency list of an undirected graph}
 }
+\value{
+Logial describing whether or not \code{adj} is decomposable
+}
 \description{
 This function returns \code{TRUE} if the graph is decomposable and \code{FALSE} otherwise
 }

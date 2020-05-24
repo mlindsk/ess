@@ -48,7 +48,8 @@ parents <- function(po, ps) {
 #'
 #' @param adj A named adjacency list of a decomposable graph
 #' @param check Boolean: check if adj is decomposable
-#' @seealso \code{\link{mcs}}, \code{\link{is_decomposable}} 
+#' @seealso \code{\link{mcs}}, \code{\link{is_decomposable}}
+#' @return A list with cliques and separators of \code{adj}
 #' @examples
 #' x <- list(a = c("b", "d"), b = c("a", "c", "d"), c = c("b", "d"), d = c("a", "c", "b"))
 #' y <- rip(x)

@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![R build status](https://github.com/mlindsk/ess/workflows/R-CMD-check/badge.svg)](https://github.com/mlindsk/ess/actions)
+[![](https://www.r-pkg.org/badges/version/ess?color=green)](https://cran.r-project.org/package=ess)
 <!-- badges: end -->
 
 ## About ess

@@ -15,6 +15,9 @@ walk(x, df, q, thres)
 
 \item{thres}{A threshold mechanism for choosing between two different ways of calculating the entropy. Can Speed up the procedure with the "correct" value.}
 }
+\value{
+A \code{fwd} or \code{bwd} object with one additional edge than the input object.
+}
 \description{
 Stepwise model selection in decomposable graphical models
 }
@@ -22,7 +25,6 @@ Stepwise model selection in decomposable graphical models
 A \code{fwd} (or \code{bwd}) object can be created using the \code{gengraph} constructor with \code{type = "fwd"}.
 }
 \examples{
-\dontrun{
 
 d <- derma[, 10:25]
 
@@ -32,7 +34,7 @@ print(s)
 plot(s)
 adj_lst(s)
 adj_mat(s)
-}
+
 }
 \seealso{
 \code{\link{fit_graph}}, \code{\link{walk.fwd}}, \code{\link{gengraph}}

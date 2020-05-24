@@ -64,12 +64,12 @@ new_edge <- function(e = character(0), d_qic = 0, idx = integer(0), ins = vector
 #' @param adj A user-specified adjacency list
 #' @param q Penalty term in the stopping criterion (\code{0} = AIC and \code{1} = BIC)
 #' @param ... Not used (for extendibility)
-#' @return A child class of a \code{gengraph} object
+#' @return A \code{gengraph} object with child class \code{type} used for model selection.
 #' @examples
-#' \dontrun{
+#'
 #' gengraph(derma, type = "fwd")
 #' gengraph(derma, type = "bwd")
-#' }
+#' 
 #' @seealso \code{\link{adj_lst.gengraph}}, \code{\link{adj_mat.gengraph}}, \code{\link{fit_graph}}, \code{\link{walk.fwd}}, \code{\link{walk.bwd}}
 #' @export
 gengraph <- function(df, type = "gen", adj = NULL, q = 0.5, ...) {

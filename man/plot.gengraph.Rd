@@ -14,6 +14,9 @@ the elements are the colors of the nodes}
 
 \item{...}{Extra arguments. See the igraph package}
 }
+\value{
+No return value, called for side effects
+}
 \description{
 A wrapper around igraphs plot method for \code{gengraph} objects
 }

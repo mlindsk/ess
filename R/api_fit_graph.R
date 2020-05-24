@@ -1,21 +1,20 @@
 #' Fit a decomposable graphical model
 #' @description A generic method for structure learning in decomposable graphical models
-#' @param df data.frame
+#' @param df Character data.frame
 #' @param type Character ("fwd", "bwd", "tree" or "tfwd")
 #' @param adj Adjacency list of a decomposable graph
 #' @param q Penalty term in the stopping criterion (\code{0} = AIC and \code{1} = BIC)
 #' @param trace Logical indicating whether or not to trace the procedure
 #' @param thres A threshold mechanism for choosing between two different ways of calculating the entropy.
 #' @param wrap logical specifying if the result of a run with type = "tree" should be converted to a "fwd" object
-#' @return A \code{gengraph} object
+#' @return A \code{gengraph} object representing a decomposable graph.
 #' @examples
-#' \dontrun{
-#' library(dplyr)
-#' 
-#' d <- derma
-#' g <- fit_graph(d, trace = FALSE, q = 0)
+#'
+#' g <- fit_graph(derma, trace = FALSE, q = 0)
 #' print(g)
-#' plot(g, vertex.size = 1)
+#' plot(g)
+#'
+#' # Adjacency matrix and adjacency list
 #' adjm <- adj_mat(g)
 #' adjl <- adj_lst(g)
 #'
@@ -25,7 +24,6 @@
 #' # Components of the graph
 #' components(adjl) # only one here
 #' 
-#' }
 #' @details
 #' The types are
 #' \itemize{
@@ -52,8 +50,12 @@ fit_graph <- function(df,
   complete <- n * (n-1L) / 2L
   null     <- 0L
 
+  if (!is.data.frame(df)) stop("df must be a data.frame.")
+  
   if (!(type %in% .types())) stop(.types_msg())
+  
   if (q < 0 || q > 1) stop("q must be between 0 and 1")
+  
   if (n == 1L) {
     adj <- structure(list(character(0)), names = colnames(df))
     x   <- gengraph(df, type = "gen", adj)

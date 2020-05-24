@@ -27,7 +27,7 @@ joint_entropy2 <- function(df) {
 #' 
 #' @param df data.frame
 #' @param thres A threshold mechanism for choosing between two different ways of calculating the entropy. Can Speed up the procedure with the "correct" value.
-#' @return A numeric
+#' @return A number representing the entropy of the variables in \code{df}.
 #' @examples
 #' entropy(derma[1:100, 1:3])
 #' 

@@ -9,6 +9,9 @@ as_adj_mat(adj)
 \arguments{
 \item{adj}{Adjacency list}
 }
+\value{
+An adjacency matrix
+}
 \description{
 Converts an adjacency list to an adjacency matrix
 }

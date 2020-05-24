@@ -15,7 +15,7 @@ fit_graph(
 )
 }
 \arguments{
-\item{df}{data.frame}
+\item{df}{Character data.frame}
 
 \item{type}{Character ("fwd", "bwd", "tree" or "tfwd")}
 
@@ -30,7 +30,7 @@ fit_graph(
 \item{wrap}{logical specifying if the result of a run with type = "tree" should be converted to a "fwd" object}
 }
 \value{
-A \code{gengraph} object
+A \code{gengraph} object representing a decomposable graph.
 }
 \description{
 A generic method for structure learning in decomposable graphical models
@@ -46,13 +46,12 @@ The types are
 Using \code{adj_lst} on an object returned by \code{fit_graph} gives the adjacency list corresponding to the graph. Similarly one can use \code{adj_mat} to obtain an adjacency matrix. Applying the \code{rip} function on an adjacency list returns the cliques and separators of the graph.
 }
 \examples{
-\dontrun{
-library(dplyr)
 
-d <- derma
-g <- fit_graph(d, trace = FALSE, q = 0)
+g <- fit_graph(derma, trace = FALSE, q = 0)
 print(g)
-plot(g, vertex.size = 1)
+plot(g)
+
+# Adjacency matrix and adjacency list
 adjm <- adj_mat(g)
 adjl <- adj_lst(g)
 
@@ -62,7 +61,6 @@ rip(adjl)$C
 # Components of the graph
 components(adjl) # only one here
 
-}
 }
 \references{
 \url{https://arxiv.org/abs/1301.2267}, \url{https://doi.org/10.1109/ictai.2004.100}

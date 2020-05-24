@@ -3,15 +3,12 @@
 #' @param x \code{gengraph}
 #' @param df data.frame
 #' @param q Penalty term in the stopping criterion  (\code{0} = AIC and \code{1} = BIC)
-#' @param thres A threshold mechanism for choosing between two different ways of calculating the entropy. Can Speed up the procedure with the "correct" value.
-#' @return A \code{bwd} object (a subclass of \code{gengraph})
+#' @param thres A threshold mechanism for choosing between two different ways of calculating
+#' the entropy. Can Speed up the procedure with the "correct" value.
 #' @details A \code{bwd} object can be created using the \code{gengraph} constructor with \code{type = "bwd"}
+#' @return A \code{bwd} object; a subclass of \code{gengraph}) used for backward selection.
 #' @examples
 #'
-#' \dontrun{
-#'
-#' library(dplyr)
-#' 
 #' d <- derma[, 10:25]
 #'
 #' g <- gengraph(d, type = "bwd")
@@ -20,7 +17,7 @@
 #' plot(s)
 #' adj_lst(s)
 #' adj_mat(s)
-#' }
+#' 
 #' @seealso \code{\link{fit_graph}}, \code{\link{walk.fwd}}, \code{\link{gengraph}}
 #' @export
 walk.bwd <- function(x, df, q = 0.5, thres = 5) {

@@ -6,11 +6,11 @@
 #' Construct a subgraph with a given set of nodes removed
 #'
 #' @param x Character vector of nodes
-#' @param g Adjacency list (named) or a neighbor matrix with dimnames given as the nodes
+#' @param g Adjacency list (named) or a adjacency matrix with dimnames given as the nodes
+#' @return An adjacency list or adjacency matrix. 
 #' @examples
 #' adj1 <- list(a = c("b", "d"), b = c("a", "c", "d"), c = c("b", "d"), d = c("a", "c", "b"))
-#' # Toy data so we can plot the graph
-#' d <- data.frame(a = "", b = "", c ="", d = "")
+#' d <- data.frame(a = "", b = "", c ="", d = "") # Toy data so we can plot the graph
 #' g <- gengraph(d, type = "gen", adj = adj1)
 #' plot(g)
 #' subgraph(c("c", "b"), adj1)
@@ -43,6 +43,7 @@ subgraph <- function(x, g) {
 #' This function returns \code{TRUE} if the graph is decomposable and \code{FALSE} otherwise
 #'
 #' @param adj Adjacency list of an undirected graph
+#' @return Logial describing whether or not \code{adj} is decomposable
 #' @examples
 #' # 4-cycle:
 #' adj1 <- list(a = c("b", "d"), b = c("a", "c"), c = c("b", "d"), d = c("a", "c"))
@@ -81,6 +82,7 @@ components <- function(adj) {
 #' A helper function to make an adjacency list corresponding to a complete graph
 #'
 #' @param nodes A character vector containing the nodes to be used in the graph
+#' @return An adjacency list of a complete graph
 #' @examples
 #' d  <- derma[, 5:8]
 #' cg <- make_complete_graph(colnames(d))
@@ -96,6 +98,7 @@ make_complete_graph <- function(nodes) {
 #' A helper function to make an adjacency list corresponding to a null graph (no edges)
 #'
 #' @param nodes A character vector containing the nodes to be used in the graph
+#' @return An adjacency list the null graph with no edges
 #' @examples
 #' d  <- derma[, 5:8]
 #' ng <- make_null_graph(colnames(d))
