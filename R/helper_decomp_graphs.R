@@ -9,12 +9,12 @@
 #' @param g Adjacency list (named) or a adjacency matrix with dimnames given as the nodes
 #' @return An adjacency list or adjacency matrix. 
 #' @examples
-#' adj1 <- list(a = c("b", "d"), b = c("a", "c", "d"), c = c("b", "d"), d = c("a", "c", "b"))
+#' adj <- list(a = c("b", "d"), b = c("a", "c", "d"), c = c("b", "d"), d = c("a", "c", "b"))
 #' d <- data.frame(a = "", b = "", c ="", d = "") # Toy data so we can plot the graph
-#' g <- gengraph(d, type = "gen", adj = adj1)
+#' g <- gengraph(d, type = "gen", adj = adj)
 #' plot(g)
-#' subgraph(c("c", "b"), adj1)
-#' subgraph(c("b", "d"), as_adj_mat(adj1))
+#' subgraph(c("c", "b"), adj)
+#' subgraph(c("b", "d"), as_adj_mat(adj))
 #' @export
 subgraph <- function(x, g) {
   # x: vector of nodes to delete
@@ -24,7 +24,6 @@ subgraph <- function(x, g) {
     return(g)
   }
   else if (inherits(g, "list")) {
-    l <- list(a = "a", b = "b")
     g <- g[-match(x, names(g))]
     g <- lapply(g, function(e) {
       rm_idx <- as.vector(stats::na.omit(match(x, e)))
@@ -46,8 +45,8 @@ subgraph <- function(x, g) {
 #' @return Logial describing whether or not \code{adj} is decomposable
 #' @examples
 #' # 4-cycle:
-#' adj1 <- list(a = c("b", "d"), b = c("a", "c"), c = c("b", "d"), d = c("a", "c"))
-#' is_decomposable(adj1) # FALSE
+#' adj <- list(a = c("b", "d"), b = c("a", "c"), c = c("b", "d"), d = c("a", "c"))
+#' is_decomposable(adj) # FALSE
 #' # Two triangles:
 #' adj2 <- list(a = c("b", "d"), b = c("a", "c", "d"), c = c("b", "d"), d = c("a", "c", "b"))
 #' is_decomposable(adj2) # TRUE

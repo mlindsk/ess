@@ -57,4 +57,4 @@ adj$ES
 For more information, see the documentation. E.g. type `?fit_graph` in an **R** session.
 
 ## See Also
-The [molic](https://github.com/mlindsk/molic) package is used for outlier detection in categorical data and is designed to work with `gengraph` objects. `gengraph` objects can also be used in connection with belief propagation via the [jti](https://github.com/mlindsk/molic) package.
+The [molic](https://github.com/mlindsk/molic) package is used for outlier detection in categorical data and is designed to work with `gengraph` objects. `gengraph` objects can also be used in connection with belief propagation via the [jti](https://github.com/mlindsk/jti) package.

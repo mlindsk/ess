@@ -17,8 +17,8 @@ This function returns \code{TRUE} if the graph is decomposable and \code{FALSE} 
 }
 \examples{
 # 4-cycle:
-adj1 <- list(a = c("b", "d"), b = c("a", "c"), c = c("b", "d"), d = c("a", "c"))
-is_decomposable(adj1) # FALSE
+adj <- list(a = c("b", "d"), b = c("a", "c"), c = c("b", "d"), d = c("a", "c"))
+is_decomposable(adj) # FALSE
 # Two triangles:
 adj2 <- list(a = c("b", "d"), b = c("a", "c", "d"), c = c("b", "d"), d = c("a", "c", "b"))
 is_decomposable(adj2) # TRUE
