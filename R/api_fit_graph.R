@@ -3,9 +3,14 @@
 #' graphical models
 #' @param df Character data.frame
 #' @param type Character ("fwd", "bwd", "tree" or "tfwd")
-#' @param adj Adjacency list of a decomposable graph
 #' @param q Penalty term in the stopping criterion
-#' where \code{0} = AIC and \code{1} = BIC
+#' where \code{0} = AIC and \code{1} = BIC. Anything in between is
+#' referred to as \code{qic}
+#' @param sparse_qic Logical. If \code{nrow(df)} is small, the tables
+#' tends to be sparse. In these cases the usual penalty term of AIC and
+#' BIC is often too restrictive. If \code{sparse_qic} is \code{TRUE}
+#' this penality is computed according to a sparse criteria. The criteria
+#' resembles the usual penalty as \code{nrow(df)} grows.
 #' @param trace Logical indicating whether or not to trace the procedure
 #' @param thres A threshold mechanism for choosing between two different ways of
 #' calculating the entropy.
@@ -14,7 +19,7 @@
 #' @return A \code{gengraph} object representing a decomposable graph.
 #' @examples
 #'
-#' g <- fit_graph(derma, "fwd", trace = TRUE, q = 1)
+#' g <- fit_graph(derma, "fwd", trace = TRUE, q = 0.5)
 #' print(g)
 #' plot(g)
 #'
@@ -47,12 +52,12 @@
 #' \code{\link{gengraph}}
 #' @export
 fit_graph <- function(df,
-                      type  = "fwd",
-                      adj   = NULL,
-                      q     = 0.5,
-                      trace = FALSE,
-                      thres = 5,
-                      wrap  = TRUE)
+                      type       = "fwd",
+                      q          = .5,
+                      trace      = FALSE,
+                      sparse_qic = TRUE,
+                      thres      = 5,
+                      wrap       = TRUE)
 {
 
   n        <- ncol(df)
@@ -65,13 +70,13 @@ fit_graph <- function(df,
   
   if (q < 0 || q > 1) stop("q must be between 0 and 1")
   
-  if (n == 1L) {
-    adj <- structure(list(character(0)), names = colnames(df))
-    x   <- gengraph(df, type = "gen", adj)
-    return(x)
-  } 
+  # if (n == 1L) {
+  #   adj <- structure(list(character(0)), names = colnames(df))
+  #   x   <- gengraph(df, type = "gen", adj)
+  #   return(x)
+  # } 
 
-  x <- gengraph(df, type, adj)
+  x <- gengraph(df, type, q, sparse_qic)
 
   if (inherits(x, "fwd")) {
     if (!neq_empt_chr(as.vector(x$e))) {
@@ -85,7 +90,7 @@ fit_graph <- function(df,
     
   triv     <- trivial(x, null, complete)
   update_k <- update_iteration(x)
-  k        <- sum(x$G_A)/2
+  k        <- sum(x$adj_matrix)/2
 
   x <- walk(x = x, df = df, q = q, thres = thres)
   k <- update_k(k)
@@ -99,7 +104,7 @@ fit_graph <- function(df,
   while (!stp(stop_val)) {
     if (trace) msg(k, complete, stop_val, "delta-qic")
     x <- walk(x = x, df = df, q = q, thres = thres)
-    k  <- update_k(k)
+    k <- update_k(k)
     if (k == triv) {
       if (trace) msg(k, complete, stop_val, "delta-qic")
       return(x)
@@ -134,12 +139,13 @@ fit_components <- function(df,
                       thres  = 5,
                       wrap   = TRUE)
 {
-  adj <- lapply(unname(comp), function(x) {
-    fit_graph(df[, x, drop = FALSE], type = type,  q = q, trace = trace, thres = thres, wrap = wrap)
-  })
-  CG <- NULL
-  if (as_gen) CG <- unlist(lapply(adj, function(x) x$CG), recursive = FALSE)
-  adj <- unlist(lapply(adj, adj_lst), recursive = FALSE)
-  if (as_gen) adj <- new_gengraph(df, adj, CG)
-  return(adj)
+  # adj <- lapply(unname(comp), function(x) {
+  #   fit_graph(df[, x, drop = FALSE], type = type,  q = q, trace = trace, thres = thres, wrap = wrap)
+  # })
+  # adj_list_cg <- NULL
+  # if (as_gen) adj_list_cg <- unlist(lapply(adj, function(x) x$CG), recursive = FALSE)
+  # adj <- unlist(lapply(adj, adj_lst), recursive = FALSE)
+  # if (as_gen) adj <- new_gengraph(df, adj, adj_list_cg)
+  # return(adj)
+  NULL
 }

@@ -4,18 +4,22 @@
 \alias{gengraph}
 \title{A generic and extendable structure for decomposable graphical models}
 \usage{
-gengraph(df, type = "gen", adj = NULL, q = 0.5, ...)
+gengraph(df, type = "fwd", q = 0.5, sparse_qic = TRUE)
 }
 \arguments{
-\item{df}{data.frame}
+\item{df}{Character data.frame}
 
-\item{type}{character ("fwd", "bwd", "tree", "tfwd", "gen")}
+\item{type}{Character ("fwd", "bwd", "tree" or "tfwd")}
 
-\item{adj}{A user-specified adjacency list}
+\item{q}{Penalty term in the stopping criterion
+where \code{0} = AIC and \code{1} = BIC. Anything in between is
+referred to as \code{qic}}
 
-\item{q}{Penalty term in the stopping criterion (\code{0} = AIC and \code{1} = BIC)}
-
-\item{...}{Not used (for extendibility)}
+\item{sparse_qic}{Logical. If \code{nrow(df)} is small, the tables
+tends to be sparse. In these cases the usual penalty term of AIC and
+BIC is often too restrictive. If \code{sparse_qic} is \code{TRUE}
+this penality is computed according to a sparse criteria. The criteria
+resembles the usual penalty as \code{nrow(df)} grows.}
 }
 \value{
 A \code{gengraph} object with child class \code{type} used for model selection.

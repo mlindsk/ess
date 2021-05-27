@@ -20,8 +20,6 @@ Construct a subgraph with a given set of nodes removed
 \examples{
 adj <- list(a = c("b", "d"), b = c("a", "c", "d"), c = c("b", "d"), d = c("a", "c", "b"))
 d <- data.frame(a = "", b = "", c ="", d = "") # Toy data so we can plot the graph
-g <- gengraph(d, type = "gen", adj = adj)
-plot(g)
 subgraph(c("c", "b"), adj)
 subgraph(c("b", "d"), as_adj_mat(adj))
 }

@@ -7,9 +7,9 @@
 fit_graph(
   df,
   type = "fwd",
-  adj = NULL,
   q = 0.5,
-  trace = TRUE,
+  trace = FALSE,
+  sparse_qic = TRUE,
   thres = 5,
   wrap = TRUE
 )
@@ -19,21 +19,30 @@ fit_graph(
 
 \item{type}{Character ("fwd", "bwd", "tree" or "tfwd")}
 
-\item{adj}{Adjacency list of a decomposable graph}
-
-\item{q}{Penalty term in the stopping criterion (\code{0} = AIC and \code{1} = BIC)}
+\item{q}{Penalty term in the stopping criterion
+where \code{0} = AIC and \code{1} = BIC. Anything in between is
+referred to as \code{qic}}
 
 \item{trace}{Logical indicating whether or not to trace the procedure}
 
-\item{thres}{A threshold mechanism for choosing between two different ways of calculating the entropy.}
+\item{sparse_qic}{Logical. If \code{nrow(df)} is small, the tables
+tends to be sparse. In these cases the usual penalty term of AIC and
+BIC is often too restrictive. If \code{sparse_qic} is \code{TRUE}
+this penality is computed according to a sparse criteria. The criteria
+resembles the usual penalty as \code{nrow(df)} grows.}
 
-\item{wrap}{logical specifying if the result of a run with type = "tree" should be converted to a "fwd" object}
+\item{thres}{A threshold mechanism for choosing between two different ways of
+calculating the entropy.}
+
+\item{wrap}{logical specifying if the result of a run with type = "tree"
+should be converted to a "fwd" object}
 }
 \value{
 A \code{gengraph} object representing a decomposable graph.
 }
 \description{
-A generic method for structure learning in decomposable graphical models
+A generic method for structure learning in decomposable
+graphical models
 }
 \details{
 The types are
@@ -43,11 +52,14 @@ The types are
 \item "tree": Chow-Liu tree (first order interactions only)
 \item "tfwd": A combination of "tree" and "fwd". This can speed up runtime considerably in high dimensions.
 }
-Using \code{adj_lst} on an object returned by \code{fit_graph} gives the adjacency list corresponding to the graph. Similarly one can use \code{adj_mat} to obtain an adjacency matrix. Applying the \code{rip} function on an adjacency list returns the cliques and separators of the graph.
+Using \code{adj_lst} on an object returned by \code{fit_graph} gives the
+adjacency list corresponding to the graph. Similarly one can use \code{adj_mat}
+to obtain an adjacency matrix. Applying the \code{rip} function on an
+adjacency list returns the cliques and separators of the graph.
 }
 \examples{
 
-g <- fit_graph(derma, trace = FALSE, q = 0)
+g <- fit_graph(derma, "fwd", trace = TRUE, q = 0.5)
 print(g)
 plot(g)
 
@@ -59,13 +71,15 @@ adjl <- adj_lst(g)
 rip(adjl)$C
 
 # Components of the graph
-components(adjl) # only one here
+components(adjl)
 
 }
 \references{
-\url{https://arxiv.org/abs/1301.2267}, \url{https://doi.org/10.1109/ictai.2004.100}
+\url{https://arxiv.org/abs/1301.2267},
+\url{https://doi.org/10.1109/ictai.2004.100}
 }
 \seealso{
-\code{\link{fit_components}}, \code{\link{adj_lst.gengraph}}, \code{\link{adj_mat.gengraph}},
-\code{\link{walk.fwd}}, \code{\link{walk.bwd}}, \code{\link{gengraph}}
+\code{\link{fit_components}}, \code{\link{adj_lst.gengraph}},
+\code{\link{adj_mat.gengraph}}, \code{\link{walk.fwd}}, \code{\link{walk.bwd}},
+\code{\link{gengraph}}
 }

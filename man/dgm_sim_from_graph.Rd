@@ -39,11 +39,5 @@ lvls <- list(
 )
 
 dgm_sim_from_graph(g, lvls, nsim = 10)
-
-# Converting the g to a gengraph object and plot
-
-d <- data.frame(A = "", B = "", X = "", Y = "") # auxillary data
-g <- gengraph(d, adj = g)
-plot(g)
-
+#'
 }

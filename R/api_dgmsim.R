@@ -65,13 +65,7 @@ parents <- function(g) {
 #' )
 #'
 #' dgm_sim_from_graph(g, lvls, nsim = 10)
-#'
-#' # Converting the g to a gengraph object and plot
-#'
-#' d <- data.frame(A = "", B = "", X = "", Y = "") # auxillary data
-#' g <- gengraph(d, adj = g)
-#' plot(g)
-#'
+#'#'
 #' @export
 dgm_sim_from_graph <- function(g, lvls, nsim = 1000, cell_rate = 0.5) {
 

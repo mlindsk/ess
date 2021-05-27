@@ -19,12 +19,12 @@ install:
 
 install2:
 	cd ..; R CMD build ess/; \
-	R CMD INSTALL ess_1.0.tar.gz
+	R CMD INSTALL ess_1.0.0.9999.tar.gz
 
 build:
 	Rscript -e "devtools::build()"; \
 	cd /home/mads/Documents/phd/software/; \
-	R CMD check --as-cran ess_1.0.tar.gz
+	R CMD check --as-cran ess_1.0.0.9999.tar.gz
 
 test:
 	Rscript -e "devtools::load_all(); tinytest::test_all('~/Documents/phd/software/efs')"

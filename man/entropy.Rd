@@ -4,12 +4,17 @@
 \alias{entropy}
 \title{Joint Entropy}
 \usage{
-entropy(df, thres = 5)
+entropy(df, thres = 5, npc = new.env())
 }
 \arguments{
 \item{df}{data.frame}
 
-\item{thres}{A threshold mechanism for choosing between two different ways of calculating the entropy. Can Speed up the procedure with the "correct" value.}
+\item{thres}{A threshold mechanism for choosing between two different ways of
+calculating the entropy. Can Speed up the procedure with the "correct" value.}
+
+\item{npc}{An environment. If supplied, the number of positive cells
+in the underlying pmf will be stored in the environment with the name
+\code{value}}
 }
 \value{
 A number representing the entropy of the variables in \code{df}.

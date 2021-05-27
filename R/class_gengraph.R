@@ -1,75 +1,59 @@
-# Give more arguments so we can call these constructors in the internal functions
-new_gengraph <- function(df, adj, cg = NULL, ...) {
+new_gengraph <- function(df, adj) {
   if (!setequal(colnames(df), names(adj))) stop("column names of df does not correspond to adj")
   structure(list(
-    G_adj = adj,                                         # Graph as adjacency list
-    G_A   = as_adj_mat(adj),                             # Graph as adjacency matrix
-    CG    = cg,                                          # Clique list
-    LV    = .map_int(df, function(x) length(unique(x))), # Level vector (for stopping criteria)
-    # mem   = new.env(hash = TRUE)),                     # Memoiser - saving entropies to reuse
-    mem   = list(ent = new.env(), npc = new.env())
+    adj_list    = adj,                                         # graph as adjacency list
+    adj_matrix  = as_adj_mat(adj),                             # graph as adjacency matrix
+    adj_list_cg = NULL,                                        # clique list
+    lvls        = .map_int(df, function(x) length(unique(x))), # level vector (for stopping criteria)
+    mem         = list(ent = new.env(), npc = new.env())       # entropies and number of positive cells
   ),
   class = c("gengraph", "list")
   )
 }
 
-# NOTE: mem should have two names:
-# - ent
-# - npc; the number of positive cells in the pmf used to calculate 'ent'
-
-new_bwd <- function(df, adj = NULL, q = 0.5) {
-  if (is.null(adj)) adj <- make_complete_graph(colnames(df))
+new_bwd <- function(df, q, sparse_qic) {
+  adj  <- make_complete_graph(colnames(df))
   g    <- new_gengraph(df, adj)
-  g$CG <- rip(adj, check = FALSE)$C
+  g$adj_list_cg <- rip(adj, check = FALSE)$C
   g$e  <- NULL # The newly deleted edge
-  structure(g, class = c("bwd", class(g)))
+  structure(g, sparse_qic = sparse_qic, class = c("bwd", class(g)))
 }
 
-new_fwd <- function(df, adj = NULL, q = 0.5) {
-  is_graph_null <- is.null(adj)
-  if (is_graph_null) adj <- make_null_graph(colnames(df))
-  g <- new_gengraph(df, adj)
-  if (is_graph_null) {
-    g$CG_A <- as_adj_mat(make_complete_graph(colnames(df))) # Can be more efficient!
-    g$CG   <- as.list(names(adj))
-  }
-  else {
-    stop("Not implementet for general graphs yet.") # Fix this to handle the conversion
-  } 
-  g$MSI <- list(S = NULL, max = list(e = character(0), idx = numeric(0), ins = vector("numeric", 2L)))
-  g$e   <- new_edge()
-  g     <- fwd_init(g, df , q)
-  structure(g, class = c("fwd", class(g)))
-}
-
-new_tree <- function(df) {
+new_fwd <- function(df, q, sparse_qic) {
   adj    <- make_null_graph(colnames(df))
   g      <- new_gengraph(df, adj)
-  g$CG   <- as_adj_lst(adj)
-  g$WGT  <- tree_weights(g, df) # Weights to use in kruskal procedure
-  structure(g, class = c("tree", class(g)))
+  g$adj_matrix_cg <- as_adj_mat(make_complete_graph(colnames(df))) # Can be more efficient!
+  g$adj_list_cg   <- as.list(names(adj))
+  g$msi  <- list(S = NULL, max = list(e = character(0), idx = numeric(0), ins = vector("numeric", 2L)))
+  g$e    <- new_edge()
+  g      <- fwd_init(g, df, q)
+  structure(g, sparse_qic = sparse_qic, class = c("fwd", class(g)))
 }
 
-new_tfwd <- function(df) {
+new_tree <- function(df, sparse_qic) {
+  adj    <- make_null_graph(colnames(df))
+  g      <- new_gengraph(df, adj)
+  g$adj_list_cg  <- as_adj_lst(adj)
+  g$WGT  <- tree_weights(g, df) # Weights to use in kruskal procedure
+  structure(g, sparse_qic = sparse_qic, class = c("tree", class(g)))
+}
+
+new_tfwd <- function(df, sparse_qic) {
   g <- fit_tree(new_tree(df), df, wrap = TRUE)
-  structure(g, class = setdiff(c("tfwd", class(g)), "tree"))
+  structure(g, sparse_qic = sparse_qic, class = setdiff(c("tfwd", class(g)), "tree"))
 }
 
 new_edge <- function(e = character(0), d_qic = 0, idx = integer(0), ins = vector("integer", 2L)) {
   # e     : edge to be deletede or added
   # d_aic : entropy difference in the two competing models
-  # idx   : in fwd procedure this is the index in MSI where e lives
-  # ins   : in fwd procedure this is the indicies in CG where a new clique must be inserted
+  # idx   : in fwd procedure this is the index in msi where e lives
+  # ins   : in fwd procedure this is the indicies in adj_list_cg where a new clique must be inserted
   structure(e, d_qic = d_qic, idx = idx, ins = ins)
 }
 
 #' A generic and extendable structure for decomposable graphical models
 #' @description A generic structure for decomposable graphical models
-#' @param df data.frame
-#' @param type character ("fwd", "bwd", "tree", "tfwd", "gen")
-#' @param adj A user-specified adjacency list
-#' @param q Penalty term in the stopping criterion (\code{0} = AIC and \code{1} = BIC)
-#' @param ... Not used (for extendibility)
+#' @inheritParams fit_graph
 #' @return A \code{gengraph} object with child class \code{type} used for model selection.
 #' @examples
 #'
@@ -78,13 +62,12 @@ new_edge <- function(e = character(0), d_qic = 0, idx = integer(0), ins = vector
 #' 
 #' @seealso \code{\link{adj_lst.gengraph}}, \code{\link{adj_mat.gengraph}}, \code{\link{fit_graph}}, \code{\link{walk.fwd}}, \code{\link{walk.bwd}}
 #' @export
-gengraph <- function(df, type = "gen", adj = NULL, q = 0.5, ...) {
+gengraph <- function(df, type = "fwd", q = .5, sparse_qic = TRUE) {
   switch(type,
-    "fwd"  = new_fwd(df, adj, q),
-    "bwd"  = new_bwd(df, adj, q),
-    "tree" = new_tree(df),
-    "tfwd" = new_tfwd(df),
-    "gen"  = new_gengraph(df, adj, cg = rip(adj)$C)
+    "fwd"  = new_fwd(df, q, sparse_qic),
+    "bwd"  = new_bwd(df, q, sparse_qic),
+    "tree" = new_tree(df, sparse_qic),
+    "tfwd" = new_tfwd(df, sparse_qic)
   ) 
 }
 

@@ -1,26 +1,32 @@
-fwd_init <- function(x, df, q = 0.5) {
+fwd_init <- function(x, df, q) {
   # x : fwd object
   M       <- nrow(df)
   penalty <- log(M)*q + (1 - q)*2
   nodes <- colnames(df)
   n     <- length(nodes)
   pairs <- utils::combn(nodes, 2,  simplify = FALSE)
-  for (j in 1:n) x$mem[["ent"]][[nodes[j]]] <- entropy(df[nodes[j]])
-  x$MSI <- lapply(seq_along(pairs), function(p) {
-    v      <- pairs[[p]]
-    edge_v <- sort_(v)
-    x$mem[["ent"]][[edge_v]] <<- entropy(df[v])
+  for (j in 1:n) {
+    npc_j <- new.env()
+    x$mem[["ent"]][[nodes[j]]] <- entropy(df[nodes[j]], npc = npc_j)
+    x$mem[["npc"]][[nodes[j]]] <- npc_j[["value"]]
+  }
+  x$msi <- lapply(seq_along(pairs), function(p) {
+    v <- pairs[[p]]
+    edge_v      <- sort_(v)
+    npc_edge_v  <- new.env()
+    x$mem[["ent"]][[edge_v]] <<- entropy(df[v], npc = npc_edge_v)
+    x$mem[["npc"]][[edge_v]] <- npc_edge_v[["value"]]
     ed       <- x$mem[["ent"]][[v[1]]] + x$mem[["ent"]][[v[2]]] - x$mem[["ent"]][[edge_v]]
     dev      <- 2 * M * ed
-    d_parms  <- -prod(x$LV[v] - 1)
-    d_qic    <- dev + penalty * d_parms
+    d_parms  <- if (TRUE) npc_edge_v[["value"]] else prod(x$lvls[v] - 1)
+    d_qic    <- dev - penalty * d_parms
     if (d_qic >= attr(x$e, "d_qic")) {
       x$e <<- new_edge(edge_v, d_qic, p)
     }
     list(C1 = v[1], C2 = v[2], S = character(0L), e = structure(ed, names = edge_v))
   })
   # If the null graph is the best, d_qic = 0 and x$e = character(0)
-  if (neq_empt_chr(as.vector(x$e))) attr(x$e, "ins") <- match(es_to_vs(x$e)[[1]], x$CG)
+  if (neq_empt_chr(as.vector(x$e))) attr(x$e, "ins") <- match(es_to_vs(x$e)[[1]], x$adj_list_cg)
   return(x)
 }
 
@@ -36,22 +42,21 @@ find_new_edge <- function(msi_prime, CG_prime) {
   new_edge(max_e, unname(max_es[max_idx]), max_idx, max_ins)
 }
 
-# m : msi object
 # Cx: clique (vector of characters) 
-is_Cx <- function(m, Cx) {
-  .map_lgl(m, function(x) setequal(x$C1, Cx) || setequal(x$C2, Cx))
+is_Cx <- function(msi, Cx) {
+  .map_lgl(msi, function(x) setequal(x$C1, Cx) || setequal(x$C2, Cx))
 } 
 
-is_Ca_or_Cb <- function(m, x, y) {
-  .map_lgl(m, function(z) {
+is_Ca_or_Cb <- function(msi, x, y) {
+  .map_lgl(msi, function(z) {
     is_CaCb <- setequal(z$C1, x) || setequal(z$C2, y)
     is_CbCa <- setequal(z$C1, y) || setequal(z$C2, x)
     is_CaCb || is_CbCa
   })
 }
 
-is_Ca_and_Cb <- function(m, x, y) {
-  .map_lgl(m, function(z) {
+is_Ca_and_Cb <- function(msi, x, y) {
+  .map_lgl(msi, function(z) {
     is_CaCb <- setequal(z$C1, x) && setequal(z$C2, y)
     is_CbCa <- setequal(z$C1, y) && setequal(z$C2, x)
     is_CaCb || is_CbCa
@@ -112,7 +117,7 @@ which_Cp_from_Cx_to_Cab <- function(CG_prime, C_prime_Cx, Cx, vx, Cab, Sab,  cty
   list(add = unique(add), add_tvl = unique(add_tvl)) 
 }
 
-update_edges_from_C_primes_to_Cab <- function(df, Cps, Cab, va, vb, mem, LV, q = 0.5, thres = 5) {
+update_edges_from_C_primes_to_Cab <- function(df, Cps, Cab, va, vb, mem, lvls, q, thres = 5) {
   # Cps : C_primes
   M       <- nrow(df)
   penalty <- log(M)*q + (1 - q)*2
@@ -122,13 +127,27 @@ update_edges_from_C_primes_to_Cab <- function(df, Cps, Cab, va, vb, mem, LV, q =
     eligs_Cab   <- setdiff(Cab, Cp)
     eligs_Cp    <- setdiff(Cp, Cab)
     eligs       <- apply(expand.grid(eligs_Cp, eligs_Cab), 1, paste, collapse = "|")
-    eligs_names <- eligs
-    eligs       <- sapply(eligs, function(e) entropy_difference(e, Sp, df, mem))
-    names(eligs) <- eligs_names
-    dev <- 2 * M * eligs
-    d_parms <- .map_dbl(es_to_vs(names(eligs)), function(x) {
-      prod(LV[x] - 1) * prod(LV[Sp])
-    })
+
+    ent <- structure(vector("double", length = length(eligs)), names = eligs)
+    npc <- structure(vector("integer", length = length(eligs)), names = eligs)
+
+    # browser()
+    
+    for (k in seq_along(eligs)) {
+      ek <- eligs[k]
+      ed_k <- entropy_difference(ek, Sp, df, mem, thres)
+      ent[k] <- ed_k[["ent"]]
+      npc[k] <- ed_k[["npc"]]
+    }
+    
+    dev <- 2 * M * ent
+    
+    d_parms <- if (TRUE) npc else {
+      .map_dbl(es_to_vs(eligs), function(x) {
+       prod(lvls[x] - 1) * prod(lvls[Sp])
+     })
+    }
+    
     d_qic <- dev - penalty * d_parms
     list(C1 = Cp, C2 = Cab, S = Sp, e = d_qic)
   })
