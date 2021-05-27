@@ -43,12 +43,12 @@ walk.bwd <- function(x, df, q = 0.5, thres = 5) {
           Cb    <- setdiff(C, va)
           S     <- intersect(Ca, Cb)
           sp    <- sort_(pair)
-          ed    <- entropy_difference(sp, S, df, x$MEM, thres)
-          x$MEM       <- ed$mem
-          HM_HM_prime <- ed$ent
+          ed    <- entropy_difference(sp, S, df, x$mem, thres)
+          # x$mem       <- ed$mem # TODO: EXPENSIVE AND NOT NECCESSARY!
+          HM_HM_prime <- ed
           dev         <- 2*M*HM_HM_prime
-          d_parms     <- -prod(x$LV[pair] - 1) * prod(x$LV[S])
-          d_qic       <- dev + penalty * d_parms
+          d_parms     <- prod(x$LV[pair] - 1) * prod(x$LV[S])
+          d_qic       <- dev - penalty * d_parms
           if (d_qic <= e_min) {
             e_min <- d_qic
             x$e   <- structure(c(va, vb), "d_qic" = d_qic)

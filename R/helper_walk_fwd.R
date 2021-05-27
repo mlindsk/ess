@@ -5,12 +5,12 @@ fwd_init <- function(x, df, q = 0.5) {
   nodes <- colnames(df)
   n     <- length(nodes)
   pairs <- utils::combn(nodes, 2,  simplify = FALSE)
-  for (j in 1:n) x$MEM[[nodes[j]]] <- entropy(df[nodes[j]])
+  for (j in 1:n) x$mem[["ent"]][[nodes[j]]] <- entropy(df[nodes[j]])
   x$MSI <- lapply(seq_along(pairs), function(p) {
     v      <- pairs[[p]]
     edge_v <- sort_(v)
-    x$MEM[[edge_v]] <<- entropy(df[v])
-    ed       <- x$MEM[[v[1]]] + x$MEM[[v[2]]] - x$MEM[[edge_v]]
+    x$mem[["ent"]][[edge_v]] <<- entropy(df[v])
+    ed       <- x$mem[["ent"]][[v[1]]] + x$mem[["ent"]][[v[2]]] - x$mem[["ent"]][[edge_v]]
     dev      <- 2 * M * ed
     d_parms  <- -prod(x$LV[v] - 1)
     d_qic    <- dev + penalty * d_parms
@@ -117,23 +117,19 @@ update_edges_from_C_primes_to_Cab <- function(df, Cps, Cab, va, vb, mem, LV, q =
   M       <- nrow(df)
   penalty <- log(M)*q + (1 - q)*2
   sep <- lapply(Cps, function(Cp) {
+    # browser()
     Sp          <- intersect(Cp, Cab)
     eligs_Cab   <- setdiff(Cab, Cp)
     eligs_Cp    <- setdiff(Cp, Cab)
-    eligs       <- expand.grid(eligs_Cp, eligs_Cab)
-    eligs       <- apply(eligs, 1, paste, collapse = "|")
+    eligs       <- apply(expand.grid(eligs_Cp, eligs_Cab), 1, paste, collapse = "|")
     eligs_names <- eligs
-    eligs <- sapply(eligs, function(e) {
-      el <- entropy_difference(e, Sp, df, mem)
-      mem <<- el$mem
-      el$ent
-    })
+    eligs       <- sapply(eligs, function(e) entropy_difference(e, Sp, df, mem))
     names(eligs) <- eligs_names
     dev <- 2 * M * eligs
     d_parms <- .map_dbl(es_to_vs(names(eligs)), function(x) {
-      -prod(LV[x] - 1) * prod(LV[Sp])
+      prod(LV[x] - 1) * prod(LV[Sp])
     })
-    d_qic <- dev + penalty * d_parms
+    d_qic <- dev - penalty * d_parms
     list(C1 = Cp, C2 = Cab, S = Sp, e = d_qic)
   })
   return(list(msi = Filter(neq_null, sep) , mem = mem))

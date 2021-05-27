@@ -164,9 +164,9 @@ walk.fwd <- function(x, df, q = 0.5, thres = 5) {
   ## ---------------------------------------------------------
   ##                CALCULATE NEW ENTROPIES
   ## ---------------------------------------------------------
-  ue        <- update_edges_from_C_primes_to_Cab(df, C_primes, Cab, va, vb, x$MEM, x$LV, q, thres)
+  ue        <- update_edges_from_C_primes_to_Cab(df, C_primes, Cab, va, vb, x$mem, x$LV, q, thres)
   msi_prime <- c(msi_prime, ue$msi)
-  x$MEM     <- ue$mem
+  # x$mem     <- ue$mem # TODO: Reference semantics; so not neccessary
   ## ---------------------------------------------------------
   ##                   RETURN THE GRAPH
   ## ---------------------------------------------------------

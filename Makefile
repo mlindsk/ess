@@ -17,6 +17,10 @@ check_fast:
 install:
 	Rscript -e "devtools::install()"
 
+install2:
+	cd ..; R CMD build ess/; \
+	R CMD INSTALL ess_1.0.tar.gz
+
 build:
 	Rscript -e "devtools::build()"; \
 	cd /home/mads/Documents/phd/software/; \

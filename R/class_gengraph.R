@@ -2,14 +2,20 @@
 new_gengraph <- function(df, adj, cg = NULL, ...) {
   if (!setequal(colnames(df), names(adj))) stop("column names of df does not correspond to adj")
   structure(list(
-    G_adj = adj,                                            # Graph as adjacency list
-    G_A   = as_adj_mat(adj),                                # Graph as adjacency matrix
-    CG    = cg,                                             # Clique list
-    LV    = .map_int(df, function(x) length(unique(x))),  # Level vector (for stopping criteria)
-    MEM   = new.env(hash = TRUE)),                          # Memoiser - saving entropies to reuse
-    class = c("gengraph", "list")
+    G_adj = adj,                                         # Graph as adjacency list
+    G_A   = as_adj_mat(adj),                             # Graph as adjacency matrix
+    CG    = cg,                                          # Clique list
+    LV    = .map_int(df, function(x) length(unique(x))), # Level vector (for stopping criteria)
+    # mem   = new.env(hash = TRUE)),                     # Memoiser - saving entropies to reuse
+    mem   = list(ent = new.env(), npc = new.env())
+  ),
+  class = c("gengraph", "list")
   )
 }
+
+# NOTE: mem should have two names:
+# - ent
+# - npc; the number of positive cells in the pmf used to calculate 'ent'
 
 new_bwd <- function(df, adj = NULL, q = 0.5) {
   if (is.null(adj)) adj <- make_complete_graph(colnames(df))

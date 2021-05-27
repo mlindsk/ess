@@ -1,16 +1,20 @@
 #' Fit a decomposable graphical model
-#' @description A generic method for structure learning in decomposable graphical models
+#' @description A generic method for structure learning in decomposable
+#' graphical models
 #' @param df Character data.frame
 #' @param type Character ("fwd", "bwd", "tree" or "tfwd")
 #' @param adj Adjacency list of a decomposable graph
-#' @param q Penalty term in the stopping criterion (\code{0} = AIC and \code{1} = BIC)
+#' @param q Penalty term in the stopping criterion
+#' where \code{0} = AIC and \code{1} = BIC
 #' @param trace Logical indicating whether or not to trace the procedure
-#' @param thres A threshold mechanism for choosing between two different ways of calculating the entropy.
-#' @param wrap logical specifying if the result of a run with type = "tree" should be converted to a "fwd" object
+#' @param thres A threshold mechanism for choosing between two different ways of
+#' calculating the entropy.
+#' @param wrap logical specifying if the result of a run with type = "tree"
+#' should be converted to a "fwd" object
 #' @return A \code{gengraph} object representing a decomposable graph.
 #' @examples
 #'
-#' g <- fit_graph(derma, trace = FALSE, q = 0)
+#' g <- fit_graph(derma, "fwd", trace = TRUE, q = 1)
 #' print(g)
 #' plot(g)
 #'
@@ -22,7 +26,7 @@
 #' rip(adjl)$C
 #'
 #' # Components of the graph
-#' components(adjl) # only one here
+#' components(adjl)
 #' 
 #' @details
 #' The types are
@@ -32,16 +36,21 @@
 #' \item "tree": Chow-Liu tree (first order interactions only)
 #' \item "tfwd": A combination of "tree" and "fwd". This can speed up runtime considerably in high dimensions.
 #' }
-#' Using \code{adj_lst} on an object returned by \code{fit_graph} gives the adjacency list corresponding to the graph. Similarly one can use \code{adj_mat} to obtain an adjacency matrix. Applying the \code{rip} function on an adjacency list returns the cliques and separators of the graph.
-#' @references \url{https://arxiv.org/abs/1301.2267}, \url{https://doi.org/10.1109/ictai.2004.100} 
-#' @seealso \code{\link{fit_components}}, \code{\link{adj_lst.gengraph}}, \code{\link{adj_mat.gengraph}},
-#' \code{\link{walk.fwd}}, \code{\link{walk.bwd}}, \code{\link{gengraph}}
+#' Using \code{adj_lst} on an object returned by \code{fit_graph} gives the
+#' adjacency list corresponding to the graph. Similarly one can use \code{adj_mat}
+#' to obtain an adjacency matrix. Applying the \code{rip} function on an
+#' adjacency list returns the cliques and separators of the graph.
+#' @references \url{https://arxiv.org/abs/1301.2267},
+#' \url{https://doi.org/10.1109/ictai.2004.100} 
+#' @seealso \code{\link{fit_components}}, \code{\link{adj_lst.gengraph}},
+#' \code{\link{adj_mat.gengraph}}, \code{\link{walk.fwd}}, \code{\link{walk.bwd}},
+#' \code{\link{gengraph}}
 #' @export
 fit_graph <- function(df,
                       type  = "fwd",
                       adj   = NULL,
                       q     = 0.5,
-                      trace = TRUE,
+                      trace = FALSE,
                       thres = 5,
                       wrap  = TRUE)
 {

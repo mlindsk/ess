@@ -1,14 +1,14 @@
 tree_weights <- function(x, df) {
   # x: gengraph object
-  nodes       <- colnames(df) 
-  n           <- length(nodes) 
-  pairs       <- utils::combn(nodes, 2,  simplify = FALSE) 
-  weights     <- structure(vector(mode = "numeric", length = n * (n - 1) / 2), names = "")
-  for (j in 1:n) x$MEM[[nodes[j]]] <- entropy(df[nodes[j]])
+  nodes   <- colnames(df) 
+  n       <- length(nodes) 
+  pairs   <- utils::combn(nodes, 2,  simplify = FALSE) 
+  weights <- structure(vector(mode = "numeric", length = n * (n - 1) / 2), names = "")
+  for (j in 1:n) x$mem[["ent"]][[nodes[j]]] <- entropy(df[nodes[j]])
   for (p in seq_along(pairs)) {
-    edge   <- sort_(pairs[[p]])
-    ed     <- entropy_difference(edge, character(0), df, x$MEM)
-    weights[p]        <- ed$ent
+    edge <- sort_(pairs[[p]])
+    ed <- entropy_difference(edge, character(0), df, x$mem)
+    weights[p] <- ed
     names(weights)[p] <- edge
   }
   return(sort(weights, decreasing = TRUE))
@@ -58,14 +58,13 @@ tree_as_fwd <- function(x, df) {
         Cj   <- x$CG[[j]]
         Sij  <- intersect(Ci, Cj)
         if (neq_empt_chr(Sij)) { # Note: This ONLY work for trees
-          x$CG_A[i,j] = 1L
-          x$CG_A[j,i] = 1L
+          x$CG_A[i,j]  <- 1L
+          x$CG_A[j,i]  <- 1L
           Ci_minus_Sij <- setdiff(Ci, Sij)
           Cj_minus_Sij <- setdiff(Cj, Sij)
           edge_ij      <- sort_(c(Ci_minus_Sij, Cj_minus_Sij))
-          ed           <- entropy_difference(edge_ij, Sij, df, x$MEM)
-          ent_ij       <- ed$ent
-          x$MEM        <- ed$mem
+          ent_ij       <- entropy_difference(edge_ij, Sij, df, x$mem)
+          # x$mem        <- ed$mem TODO: reference semantics!
           if (ent_ij >= attr(x$e, "d_qic")) {
             x$e <- new_edge(edge_ij, ent_ij, k, c(i, j))
           }

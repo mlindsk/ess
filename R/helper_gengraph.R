@@ -27,11 +27,11 @@ update_iteration <- function(x) {
 stop_condition <- function(x) {
   # x: gengraph
   if (inherits(x, "bwd")) {
-    f <- function(stop_val) return(stop_val >= 0L)
+    f <- function(stop_val) return(stop_val >= -.1)
     return(f)
   }
   if (inherits(x, "fwd")) {
-    f <- function(stop_val) return(stop_val <= 0L)
+    f <- function(stop_val) return(stop_val <= .1)
     return(f)
   }  
 }

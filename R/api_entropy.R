@@ -38,53 +38,52 @@ entropy <- function(df, thres = 5) {
 }
 
 entropy_difference <- function(e, S, df, mem, thres = 5) {
-  # FIX: Replace ifelse with if() ... else ...
   # FIX: For large problems, delete some entropies?
-  #      - maybe as for memory accessible and
-  #      - clean mem if it reaches 50% of this or so?
+  #      - maybe as for mem[["ent"]]ory accessible and
+  #      - clean mem[["ent"]] if it reaches 50% of this or so?
   v <- unlist(es_to_vs(e))
 
   H_S <- 0L        
   if (neq_empt_chr(S)) {
     S_ <- sort_(S)
-    if (exists(S_, envir = mem, inherits = FALSE)) {
-      H_S <- mem[[S_]]
+    if (exists(S_, envir = mem[["ent"]], inherits = FALSE)) {
+      H_S <- mem[["ent"]][[S_]]
     } else {
       H_S  <- entropy(df[S], thres)
-      mem[[S_]] <- H_S
+      mem[["ent"]][[S_]] <- H_S
     }
   }
 
   H_S_x <- 0L        
   Sx <- sort_(c(S, v[1]))
-  if (exists(Sx, envir = mem, inherits = FALSE)) {
-    H_S_x <- mem[[Sx]]
+  if (exists(Sx, envir = mem[["ent"]], inherits = FALSE)) {
+    H_S_x <- mem[["ent"]][[Sx]]
   } else {
     H_S_x  <- entropy(df[c(S, v[1])], thres)
-    mem[[Sx]] <- H_S_x 
+    mem[["ent"]][[Sx]] <- H_S_x 
   }
   
   H_S_y <- 0L
   Sy <- sort_(c(S, v[2]))
-  if (exists(Sy, envir = mem, inherits = FALSE)) {
-    H_S_y <- mem[[Sy]]
+  if (exists(Sy, envir = mem[["ent"]], inherits = FALSE)) {
+    H_S_y <- mem[["ent"]][[Sy]]
   } else {
     H_S_y  <- entropy(df[c(S, v[2])], thres)
-    mem[[Sy]] <- H_S_y 
+    mem[["ent"]][[Sy]] <- H_S_y 
   }
   
   H_S_xy <- 0L
   Sxy <- sort_(c(S, v))
-  if (exists(Sxy, envir = mem, inherits = FALSE)) {
-    H_S_xy <- mem[[Sxy]]
+  if (exists(Sxy, envir = mem[["ent"]], inherits = FALSE)) {
+    H_S_xy <- mem[["ent"]][[Sxy]]
   } else {
     H_S_xy  <- entropy(df[c(S, v)], thres)
-    mem[[Sxy]] <- H_S_xy  
+    mem[["ent"]][[Sxy]] <- H_S_xy  
   }
   
   H_S_x_S_y <- H_S_x + H_S_y
   # Test needed to avoid < 0 due to floating point errors
   edge_ent <- ifelse(isTRUE(all.equal(H_S_x_S_y, H_S_xy)), 0L,  H_S_x_S_y - H_S_xy - H_S)
-  return(list(ent = edge_ent, mem = mem ))
+  return(edge_ent)
 }
 
