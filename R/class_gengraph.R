@@ -16,7 +16,8 @@ new_bwd <- function(df, q, sparse_qic) {
   g    <- new_gengraph(df, adj)
   g$adj_list_cg <- rip(adj, check = FALSE)$C
   g$e  <- NULL # The newly deleted edge
-  structure(g, sparse_qic = sparse_qic, class = c("bwd", class(g)))
+  g$sparse_qic <- sparse_qic
+  structure(g, class = c("bwd", class(g)))
 }
 
 new_fwd <- function(df, q, sparse_qic) {
@@ -26,8 +27,9 @@ new_fwd <- function(df, q, sparse_qic) {
   g$adj_list_cg   <- as.list(names(adj))
   g$msi  <- list(S = NULL, max = list(e = character(0), idx = numeric(0), ins = vector("numeric", 2L)))
   g$e    <- new_edge()
+  g$sparse_qic <- sparse_qic
   g      <- fwd_init(g, df, q)
-  structure(g, sparse_qic = sparse_qic, class = c("fwd", class(g)))
+  structure(g, class = c("fwd", class(g)))
 }
 
 new_tree <- function(df, sparse_qic) {
@@ -35,12 +37,14 @@ new_tree <- function(df, sparse_qic) {
   g      <- new_gengraph(df, adj)
   g$adj_list_cg  <- as_adj_lst(adj)
   g$WGT  <- tree_weights(g, df) # Weights to use in kruskal procedure
-  structure(g, sparse_qic = sparse_qic, class = c("tree", class(g)))
+  g$sparse_qic <- sparse_qic
+  structure(g, class = c("tree", class(g)))
 }
 
 new_tfwd <- function(df, sparse_qic) {
   g <- fit_tree(new_tree(df), df, wrap = TRUE)
-  structure(g, sparse_qic = sparse_qic, class = setdiff(c("tfwd", class(g)), "tree"))
+  g$sparse_qic <- sparse_qic
+  structure(g, class = setdiff(c("tfwd", class(g)), "tree"))
 }
 
 new_edge <- function(e = character(0), d_qic = 0, idx = integer(0), ins = vector("integer", 2L)) {

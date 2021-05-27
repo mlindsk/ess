@@ -18,7 +18,7 @@ fwd_init <- function(x, df, q) {
     x$mem[["npc"]][[edge_v]] <- npc_edge_v[["value"]]
     ed       <- x$mem[["ent"]][[v[1]]] + x$mem[["ent"]][[v[2]]] - x$mem[["ent"]][[edge_v]]
     dev      <- 2 * M * ed
-    d_parms  <- if (TRUE) npc_edge_v[["value"]] else prod(x$lvls[v] - 1)
+    d_parms  <- if (x$sparse_qic) npc_edge_v[["value"]] else prod(x$lvls[v] - 1)
     d_qic    <- dev - penalty * d_parms
     if (d_qic >= attr(x$e, "d_qic")) {
       x$e <<- new_edge(edge_v, d_qic, p)
@@ -117,7 +117,18 @@ which_Cp_from_Cx_to_Cab <- function(CG_prime, C_prime_Cx, Cx, vx, Cab, Sab,  cty
   list(add = unique(add), add_tvl = unique(add_tvl)) 
 }
 
-update_edges_from_C_primes_to_Cab <- function(df, Cps, Cab, va, vb, mem, lvls, q, thres = 5) {
+update_edges_from_C_primes_to_Cab <- function(
+                                              df,
+                                              Cps,
+                                              Cab,
+                                              va,
+                                              vb,
+                                              mem,
+                                              lvls,
+                                              q,
+                                              thres,
+                                              sparse_qic
+                                              ) {
   # Cps : C_primes
   M       <- nrow(df)
   penalty <- log(M)*q + (1 - q)*2
@@ -141,8 +152,8 @@ update_edges_from_C_primes_to_Cab <- function(df, Cps, Cab, va, vb, mem, lvls, q
     }
     
     dev <- 2 * M * ent
-    
-    d_parms <- if (TRUE) npc else {
+
+    d_parms <- if (sparse_qic) npc else {
       .map_dbl(es_to_vs(eligs), function(x) {
        prod(lvls[x] - 1) * prod(lvls[Sp])
      })

@@ -47,7 +47,7 @@ walk.bwd <- function(x, df, q = .5, thres = 5) {
           ent <- ed[["ent"]]
           npc <- ed[["npc"]]
           dev <- 2 * M * ent
-          d_parms <- if (TRUE) npc else prod(x$lvls[pair] - 1) * prod(x$lvls[S])
+          d_parms <- if (x$sparse_qic) npc else prod(x$lvls[pair] - 1) * prod(x$lvls[S])
           d_qic   <- dev - penalty * d_parms
           if (d_qic <= e_min) {
             e_min <- d_qic
