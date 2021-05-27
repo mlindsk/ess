@@ -2,3 +2,4 @@
 TODO.org
 ^README\.html$
 inst/doc
+Makefile
