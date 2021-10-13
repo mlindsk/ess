@@ -19,19 +19,13 @@
 #' @return A \code{gengraph} object representing a decomposable graph.
 #' @examples
 #'
-#' g <- fit_graph(derma, "fwd", trace = TRUE, q = 0.5)
+#' g <- fit_graph(derma)
 #' print(g)
 #' plot(g)
 #'
 #' # Adjacency matrix and adjacency list
 #' adjm <- adj_mat(g)
 #' adjl <- adj_lst(g)
-#'
-#' # Cliques in the graph
-#' rip(adjl)$C
-#'
-#' # Components of the graph
-#' components(adjl)
 #' 
 #' @details
 #' The types are
@@ -45,37 +39,26 @@
 #' adjacency list corresponding to the graph. Similarly one can use \code{adj_mat}
 #' to obtain an adjacency matrix. Applying the \code{rip} function on an
 #' adjacency list returns the cliques and separators of the graph.
-#' @references \url{https://arxiv.org/abs/1301.2267},
-#' \url{https://doi.org/10.1109/ictai.2004.100} 
-#' @seealso \code{\link{fit_components}}, \code{\link{adj_lst.gengraph}},
-#' \code{\link{adj_mat.gengraph}}, \code{\link{walk.fwd}}, \code{\link{walk.bwd}},
-#' \code{\link{gengraph}}
+#' @references \url{https://arxiv.org/abs/1301.2267}, \doi{10.1109/ictai.2004.100} 
+#' @seealso \code{\link{adj_lst}}, \code{\link{adj_mat}},
+#' \code{\link{as_igraph}}, \code{\link{gengraph}}
 #' @export
 fit_graph <- function(df,
                       type       = "fwd",
                       q          = .5,
                       trace      = FALSE,
-                      sparse_qic = TRUE,
+                      sparse_qic = FALSE,
                       thres      = 5,
                       wrap       = TRUE)
 {
 
-  n        <- ncol(df)
+  n <- ncol(df)
   complete <- n * (n-1L) / 2L
-  null     <- 0L
 
   if (!is.data.frame(df)) stop("df must be a data.frame.")
-  
   if (!(type %in% .types())) stop(.types_msg())
+  if (q < 0) stop("q must be positive")
   
-  if (q < 0 || q > 1) stop("q must be between 0 and 1")
-  
-  # if (n == 1L) {
-  #   adj <- structure(list(character(0)), names = colnames(df))
-  #   x   <- gengraph(df, type = "gen", adj)
-  #   return(x)
-  # } 
-
   x <- gengraph(df, type, q, sparse_qic)
 
   if (inherits(x, "fwd")) {
@@ -88,7 +71,7 @@ fit_graph <- function(df,
   
   if (inherits(x, "tree")) return(fit_tree(x, df, wrap))
     
-  triv     <- trivial(x, null, complete)
+  triv     <- trivial(x, complete)
   update_k <- update_iteration(x)
   k        <- sum(x$adj_matrix)/2
 
@@ -117,35 +100,26 @@ fit_graph <- function(df,
 
 
 #' Fit a decomposable graphical model on each component
-#' @description Structure learning in decomposable graphical models on several components
-#' @param df data.frame
-#' @param comp A list with character vectors. Each element in the list is a component in the graph (using expert knowledge)
-#' @param type Character ("fwd", "bwd", "tree" or "tfwd")
-#' @param q Penalty term in the stopping criterion (\code{0} = AIC and \code{1} = BIC)
-#' @param as_gen Logical. Convert to gengraph or not. If true, the graph can be plotted.
-#' @param trace Logical indicating whether or not to trace the procedure
-#' @param thres A threshold mechanism for choosing between two different ways of calculating the entropy.
-#' @param wrap logical specifying if the result of a run with type = "tree" should be converted to a "fwd" object
-#' @return A \code{gengraph} object
-#' @seealso \code{\link{fit_graph}}, \code{\link{adj_lst.gengraph}}, \code{\link{adj_mat.gengraph}}, \code{\link{walk.fwd}},
+#' @description Structure learning in decomposable graphical models on
+#' several components
+#' @inheritParams fit_graph
+#' @param comp A list with character vectors. Each element in the list is a
+#' component in the graph (using expert knowledge)
+#' @return An adjacency list object
+#' @seealso \code{\link{fit_graph}}, \code{\link{adj_lst.gengraph}},
+#' \code{\link{adj_mat.gengraph}}, \code{\link{walk.fwd}},
 #' \code{\link{walk.bwd}}, \code{\link{gengraph}}
 #' @export
 fit_components <- function(df,
                       comp,
                       type   = "fwd",
                       q      = 0.5,
-                      as_gen = TRUE,
-                      trace  = TRUE,
+                      trace  = FALSE,
                       thres  = 5,
                       wrap   = TRUE)
 {
-  # adj <- lapply(unname(comp), function(x) {
-  #   fit_graph(df[, x, drop = FALSE], type = type,  q = q, trace = trace, thres = thres, wrap = wrap)
-  # })
-  # adj_list_cg <- NULL
-  # if (as_gen) adj_list_cg <- unlist(lapply(adj, function(x) x$CG), recursive = FALSE)
-  # adj <- unlist(lapply(adj, adj_lst), recursive = FALSE)
-  # if (as_gen) adj <- new_gengraph(df, adj, adj_list_cg)
-  # return(adj)
-  NULL
+  adj <- lapply(unname(comp), function(x) {
+    fit_graph(df[, x, drop = FALSE], type = type,  q = q, trace = trace, thres = thres, wrap = wrap)
+  })
+  return(unlist(lapply(adj, adj_lst), recursive = FALSE))
 }

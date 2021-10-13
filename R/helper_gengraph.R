@@ -6,9 +6,9 @@ msg <- function(k, complete, val, stop_crit) {
   cat(paste(" Edges:", k, "of", complete, "-", stop_crit, "=", round(val, 6L)),"\n")
 }
 
-trivial <- function(x, null, complete) {
+trivial <- function(x, complete) {
   # x: gengraph
-  if (inherits(x, "bwd")) return(null) 
+  if (inherits(x, "bwd")) return(0L) 
   if (inherits(x, "fwd")) return(complete)
 }
 
@@ -83,6 +83,20 @@ adj_mat <- function(x) UseMethod("adj_mat")
 #' @rdname adj_mat
 #' @export
 adj_mat.gengraph <- function(x) x$adj_matrix
+
+
+#' Gengraph as igraph
+#' @description Convert a \code{gengraph} object to an \code{igraph} object
+#' @param x \code{gengraph} object
+#' @return An \code{igraph} object
+#' @export
+as_igraph <- function(x) UseMethod("as_igraph")
+
+#' @rdname as_igraph
+#' @export
+as_igraph.gengraph <- function(x) igraph::graph_from_adjacency_matrix(x$adj_matrix, "undirected")
+
+
 
 #' Converts an adjacency matrix to an adjacency list
 #'

@@ -37,13 +37,13 @@ devtools::install_github("mlindsk/ess", build_vignettes = FALSE)
 
 ## Getting Started
 
-The main function in **ess** is `fit_graph` which fits a decomposable graph. An object returned from `fit_graph` is a `gengraph` object. `fit_graph` has four types; forward selection (`fwd`), backward selection (`bwd`), tree (`tree`) and a combination of tree and forward (`tfwd`). Using `adj_lst` on an object returned by `fit_graph` gives the adjacency list corresponding to the graph. Similarly one can use `adj_mat` to obtain an adjacency matrix.
+The main function in **ess** is `fit_graph` which fits a decomposable graph. An object returned from `fit_graph` is a `gengraph` object. `fit_graph` has four types; forward selection (`fwd`), backward selection (`bwd`), tree (`tree`) and a combination of tree and forward (`tfwd`). Using `adj_lst` on an object returned by `fit_graph` gives the adjacency list corresponding to the graph. Similarly one can use `adj_mat` to obtain an adjacency matrix. Finally, the object can be converted to an `igraph` object using the `as_igraph` function.
 
 A neat usecase of **ess** is that of variable selection. Consider the built-in data `derma` (dermatitis) with class variable `ES`. We can fit a graph structure to this data, and inspect the graph to see which variables `ES` directly depends upon:
 
 ```{r var_select}
 library(ess)
-g <- fit_graph(derma, trace = FALSE)
+g <- fit_graph(derma)
 plot(g, vertex.size = 1)
 ```
 
@@ -57,4 +57,4 @@ adj$ES
 For more information, see the documentation. E.g. type `?fit_graph` in an **R** session.
 
 ## See Also
-The [molic](https://github.com/mlindsk/molic) package is used for outlier detection in categorical data and is designed to work with `gengraph` objects. `gengraph` objects can also be used in connection with belief propagation via the [jti](https://github.com/mlindsk/jti) package.
+The [molic](https://github.com/mlindsk/molic) package is used for outlier detection in categorical data and is designed to work with `gengraph` objects. One can use **ess** to fit a `gengraph` object, extract the adjacency matrix, conert it to an `igraph` object and use it in connection with belief propagation via the [jti](https://github.com/mlindsk/jti) package.

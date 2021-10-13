@@ -6,7 +6,7 @@
 #' @param thres A threshold mechanism for choosing between two different ways of calculating the entropy. Can Speed up the procedure with the "correct" value.
 #' @details A \code{fwd} object can be created using the \code{gengraph} constructor with \code{type = "fwd"}
 #' @return A \code{fwd} object; a subclass of \code{gengraph}) used for forward selection.
-#' @references \url{https://arxiv.org/abs/1301.2267}, \url{https://doi.org/10.1109/ictai.2004.100}
+#' @references \url{https://arxiv.org/abs/1301.2267}, \doi{10.1109/ictai.2004.100}
 #' @examples
 #'
 #' d <- derma[, 10:25]

@@ -37,7 +37,7 @@ adj_mat(s)
 
 }
 \references{
-\url{https://arxiv.org/abs/1301.2267}, \url{https://doi.org/10.1109/ictai.2004.100}
+\url{https://arxiv.org/abs/1301.2267}, \doi{10.1109/ictai.2004.100}
 }
 \seealso{
 \code{\link{fit_graph}}, \code{\link{walk.bwd}}, \code{\link{gengraph}}

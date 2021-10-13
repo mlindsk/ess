@@ -9,36 +9,40 @@ fit_components(
   comp,
   type = "fwd",
   q = 0.5,
-  as_gen = TRUE,
-  trace = TRUE,
+  trace = FALSE,
   thres = 5,
   wrap = TRUE
 )
 }
 \arguments{
-\item{df}{data.frame}
+\item{df}{Character data.frame}
 
-\item{comp}{A list with character vectors. Each element in the list is a component in the graph (using expert knowledge)}
+\item{comp}{A list with character vectors. Each element in the list is a
+component in the graph (using expert knowledge)}
 
 \item{type}{Character ("fwd", "bwd", "tree" or "tfwd")}
 
-\item{q}{Penalty term in the stopping criterion (\code{0} = AIC and \code{1} = BIC)}
-
-\item{as_gen}{Logical. Convert to gengraph or not. If true, the graph can be plotted.}
+\item{q}{Penalty term in the stopping criterion
+where \code{0} = AIC and \code{1} = BIC. Anything in between is
+referred to as \code{qic}}
 
 \item{trace}{Logical indicating whether or not to trace the procedure}
 
-\item{thres}{A threshold mechanism for choosing between two different ways of calculating the entropy.}
+\item{thres}{A threshold mechanism for choosing between two different ways of
+calculating the entropy.}
 
-\item{wrap}{logical specifying if the result of a run with type = "tree" should be converted to a "fwd" object}
+\item{wrap}{logical specifying if the result of a run with type = "tree"
+should be converted to a "fwd" object}
 }
 \value{
-A \code{gengraph} object
+An adjacency list object
 }
 \description{
-Structure learning in decomposable graphical models on several components
+Structure learning in decomposable graphical models on
+several components
 }
 \seealso{
-\code{\link{fit_graph}}, \code{\link{adj_lst.gengraph}}, \code{\link{adj_mat.gengraph}}, \code{\link{walk.fwd}},
+\code{\link{fit_graph}}, \code{\link{adj_lst.gengraph}},
+\code{\link{adj_mat.gengraph}}, \code{\link{walk.fwd}},
 \code{\link{walk.bwd}}, \code{\link{gengraph}}
 }

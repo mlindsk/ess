@@ -9,7 +9,7 @@ fit_graph(
   type = "fwd",
   q = 0.5,
   trace = FALSE,
-  sparse_qic = TRUE,
+  sparse_qic = FALSE,
   thres = 5,
   wrap = TRUE
 )
@@ -59,7 +59,7 @@ adjacency list returns the cliques and separators of the graph.
 }
 \examples{
 
-g <- fit_graph(derma, "fwd", trace = TRUE, q = 0.5)
+g <- fit_graph(derma)
 print(g)
 plot(g)
 
@@ -67,19 +67,11 @@ plot(g)
 adjm <- adj_mat(g)
 adjl <- adj_lst(g)
 
-# Cliques in the graph
-rip(adjl)$C
-
-# Components of the graph
-components(adjl)
-
 }
 \references{
-\url{https://arxiv.org/abs/1301.2267},
-\url{https://doi.org/10.1109/ictai.2004.100}
+\url{https://arxiv.org/abs/1301.2267}, \doi{10.1109/ictai.2004.100}
 }
 \seealso{
-\code{\link{fit_components}}, \code{\link{adj_lst.gengraph}},
-\code{\link{adj_mat.gengraph}}, \code{\link{walk.fwd}}, \code{\link{walk.bwd}},
-\code{\link{gengraph}}
+\code{\link{adj_lst}}, \code{\link{adj_mat}},
+\code{\link{as_igraph}}, \code{\link{gengraph}}
 }
